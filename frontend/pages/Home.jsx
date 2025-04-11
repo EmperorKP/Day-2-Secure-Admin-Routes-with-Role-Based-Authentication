@@ -4,13 +4,13 @@ import axios from 'axios';
 function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user"); // Default role is user
+  const [role, setRole] = useState("user");
   const [errorMessage, setErrorMessage] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and register form
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
+      const response = await axios.post("http://localhost:5008/api/auth/register", {
         email,
         password,
         role
@@ -20,20 +20,20 @@ function Home() {
       setPassword('');
       setRole('user');
     } catch (error) {
-      setErrorMessage(error.response.data || "Registration failed");
+      setErrorMessage(error.response?.data || "Registration failed");
     }
   };
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
+      const response = await axios.post("http://localhost:5008/api/auth/login", {
         email,
         password
       });
       localStorage.setItem("token", response.data.token);
-      window.location.href = '/admin/dashboard'; // Redirect to admin dashboard after login
+      window.location.href = '/admin/dashboard';
     } catch (error) {
-      setErrorMessage(error.response.data || "Login failed");
+      setErrorMessage(error.response?.data || "Login failed");
     }
   };
 
@@ -53,8 +53,7 @@ function Home() {
         value={password} 
         onChange={(e) => setPassword(e.target.value)} 
       />
-      
-      {/* Only show this input for registration form */}
+
       {!isLogin && (
         <select 
           value={role} 
@@ -69,9 +68,8 @@ function Home() {
         {isLogin ? "Login" : "Register"}
       </button>
 
-      <p>{errorMessage}</p>
-      
-      {/* Toggle between login and register form */}
+      <p style={{ color: 'red' }}>{errorMessage}</p>
+
       <button onClick={() => setIsLogin(!isLogin)}>
         {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
       </button>
